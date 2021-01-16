@@ -2,26 +2,14 @@
 
 #include "Particles.h"
 
-#define PARTICLE_COUNT 20
 #define GRID_CELL_SIZE 40
 #define GRID_CELL_SIZE_HALF (GRID_CELL_SIZE / 2)
 #define CANVAS_WIDTH 400
 #define CANVAS_HEIGHT 400
 #define GRID_WIDTH (CANVAS_WIDTH / GRID_CELL_SIZE)
 #define GRID_HEIGHT (CANVAS_HEIGHT / GRID_CELL_SIZE)
-#define MAX_NEIGHBORS 3
+#define MAX_NEIGHBORS 4
 #define NEIGHBORS_SIZE (GRID_WIDTH * GRID_HEIGHT * MAX_NEIGHBORS)
-
-typedef struct
-{
-    int id;
-    float x;
-    float y;
-    float vx;
-    float vy;
-    float dx;
-    float dy;
-} Particle;
 
 Particle particles[PARTICLE_COUNT];
 Particle *neighbors[NEIGHBORS_SIZE];
@@ -36,6 +24,28 @@ void initParticle(Particle *particle, int id)
     particle->dx = 0;
     particle->dy = 0;
 };
+
+Particle *getParticle(int index) {
+  return particles + index;
+}
+
+void printParticle(Particle *particle) {
+  Serial.print("[");
+  Serial.print(particle->id);
+  Serial.print(": ");
+  Serial.print(particle->x);
+  Serial.print(",");
+  Serial.print(particle->y);
+  Serial.print(" ");
+  Serial.print(particle->vx);
+  Serial.print(",");
+  Serial.print(particle->vy);
+  Serial.print(" ");
+  Serial.print(particle->dx);
+  Serial.print(",");
+  Serial.print(particle->dy);
+  Serial.print("]");
+}
 
 void moveParticle(Particle *particle)
 {
