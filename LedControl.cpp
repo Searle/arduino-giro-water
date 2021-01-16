@@ -115,27 +115,6 @@ void LedControl::clearDisplay(int addr)
     }
 }
 
-void LedControl::setLed(int addr, int row, int column, boolean state)
-{
-    int offset;
-    byte val = 0x00;
-
-    if (addr < 0 || addr >= maxDevices)
-        return;
-    if (row < 0 || row > 7 || column < 0 || column > 7)
-        return;
-    offset = addr * 8;
-    val = B10000000 >> column;
-    if (state)
-        status[offset + row] = status[offset + row] | val;
-    else
-    {
-        val = ~val;
-        status[offset + row] = status[offset + row] & val;
-    }
-    spiTransfer(addr, row + 1, status[offset + row]);
-}
-
 void LedControl::setRow(int addr, int row, byte value)
 {
     int offset;
@@ -146,62 +125,6 @@ void LedControl::setRow(int addr, int row, byte value)
     offset = addr * 8;
     status[offset + row] = value;
     spiTransfer(addr, row + 1, status[offset + row]);
-}
-
-void LedControl::setColumn(int addr, int col, byte value)
-{
-    byte val;
-
-    if (addr < 0 || addr >= maxDevices)
-        return;
-    if (col < 0 || col > 7)
-        return;
-    for (int row = 0; row < 8; row++)
-    {
-        val = value >> (7 - row);
-        val = val & 0x01;
-        setLed(addr, row, col, val);
-    }
-}
-
-void LedControl::setDigit(int addr, int digit, byte value, boolean dp)
-{
-    int offset;
-    byte v;
-
-    if (addr < 0 || addr >= maxDevices)
-        return;
-    if (digit < 0 || digit > 7 || value > 15)
-        return;
-    offset = addr * 8;
-    v = charTable[value];
-    if (dp)
-        v |= B10000000;
-    status[offset + digit] = v;
-    spiTransfer(addr, digit + 1, v);
-}
-
-void LedControl::setChar(int addr, int digit, char value, boolean dp)
-{
-    int offset;
-    byte index, v;
-
-    if (addr < 0 || addr >= maxDevices)
-        return;
-    if (digit < 0 || digit > 7)
-        return;
-    offset = addr * 8;
-    index = (byte)value;
-    if (index > 127)
-    {
-        //nothing define we use the space char
-        value = 32;
-    }
-    v = charTable[index];
-    if (dp)
-        v |= B10000000;
-    status[offset + digit] = v;
-    spiTransfer(addr, digit + 1, v);
 }
 
 void LedControl::spiTransfer(int addr, volatile byte opcode, volatile byte data)

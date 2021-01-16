@@ -8,9 +8,9 @@
 #define CANVAS_HEIGHT 400
 #define GRID_WIDTH ((CANVAS_WIDTH + GRID_CELL_SIZE - 1) / GRID_CELL_SIZE)
 #define GRID_HEIGHT ((CANVAS_HEIGHT + GRID_CELL_SIZE - 1) / GRID_CELL_SIZE)
-#define MAX_NEIGHBORS 4
+#define MAX_NEIGHBORS 3
 #define NEIGHBORS_SIZE (GRID_WIDTH * GRID_HEIGHT * MAX_NEIGHBORS)
-#define DAMPENING 0.2
+#define DAMPENING 0.1
 
 Particle particles[PARTICLE_COUNT];
 byte neighbors[NEIGHBORS_SIZE];
@@ -72,18 +72,22 @@ void particlePhysics(Particle *particle, float gravity_x, float gravity_y)
     if (particle->x < GRID_CELL_SIZE_HALF)
     {
         particle->dx += GRID_CELL_SIZE_HALF - particle->x;
+        particle->vx= 0;
     }
     else if (particle->x > CANVAS_WIDTH - GRID_CELL_SIZE_HALF)
     {
         particle->dx -= particle->x - CANVAS_WIDTH + GRID_CELL_SIZE_HALF;
+        particle->vx= 0;
     }
     if (particle->y < GRID_CELL_SIZE_HALF)
     {
         particle->dy += GRID_CELL_SIZE_HALF - particle->y;
+        particle->vy= 0;
     }
     else if (particle->y > CANVAS_HEIGHT - GRID_CELL_SIZE_HALF)
     {
         particle->dy -= particle->y - CANVAS_HEIGHT + GRID_CELL_SIZE_HALF;
+        particle->vy= 0;
     }
 
     // grid coordinates

@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define PARTICLE_COUNT 30
+#define PARTICLE_COUNT 26
 
 typedef struct
 {
