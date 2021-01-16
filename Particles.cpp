@@ -6,10 +6,11 @@
 #define GRID_CELL_SIZE_HALF (GRID_CELL_SIZE / 2)
 #define CANVAS_WIDTH 400
 #define CANVAS_HEIGHT 400
-#define GRID_WIDTH (CANVAS_WIDTH / GRID_CELL_SIZE)
-#define GRID_HEIGHT (CANVAS_HEIGHT / GRID_CELL_SIZE)
+#define GRID_WIDTH ((CANVAS_WIDTH + GRID_CELL_SIZE - 1) / GRID_CELL_SIZE)
+#define GRID_HEIGHT ((CANVAS_HEIGHT + GRID_CELL_SIZE - 1) / GRID_CELL_SIZE)
 #define MAX_NEIGHBORS 4
 #define NEIGHBORS_SIZE (GRID_WIDTH * GRID_HEIGHT * MAX_NEIGHBORS)
+#define DAMPENING 0.2
 
 Particle particles[PARTICLE_COUNT];
 Particle *neighbors[NEIGHBORS_SIZE];
@@ -25,26 +26,28 @@ void initParticle(Particle *particle, int id)
     particle->dy = 0;
 };
 
-Particle *getParticle(int index) {
-  return particles + index;
+Particle *getParticle(int index)
+{
+    return particles + index;
 }
 
-void printParticle(Particle *particle) {
-  Serial.print("[");
-  Serial.print(particle->id);
-  Serial.print(": ");
-  Serial.print(particle->x);
-  Serial.print(",");
-  Serial.print(particle->y);
-  Serial.print(" ");
-  Serial.print(particle->vx);
-  Serial.print(",");
-  Serial.print(particle->vy);
-  Serial.print(" ");
-  Serial.print(particle->dx);
-  Serial.print(",");
-  Serial.print(particle->dy);
-  Serial.print("]");
+void printParticle(Particle *particle)
+{
+    Serial.print("[");
+    Serial.print(particle->id);
+    Serial.print(": ");
+    Serial.print(particle->x);
+    Serial.print(",");
+    Serial.print(particle->y);
+    Serial.print(" ");
+    Serial.print(particle->vx);
+    Serial.print(",");
+    Serial.print(particle->vy);
+    Serial.print(" ");
+    Serial.print(particle->dx);
+    Serial.print(",");
+    Serial.print(particle->dy);
+    Serial.print("]");
 }
 
 void moveParticle(Particle *particle)
@@ -105,8 +108,8 @@ void particlePhysics(Particle *particle, float gravity_x, float gravity_y)
                         float d = sqrt(dx * dx + dy * dy);
                         if (d < GRID_CELL_SIZE && d > 0)
                         {
-                            dx = (dx / d) * (GRID_CELL_SIZE - d) * 0.25;
-                            dy = (dy / d) * (GRID_CELL_SIZE - d) * 0.25;
+                            dx = (dx / d) * (GRID_CELL_SIZE - d) * DAMPENING;
+                            dy = (dy / d) * (GRID_CELL_SIZE - d) * DAMPENING;
                             particle->dx -= dx;
                             particle->dy -= dy;
                             that->dx += dx;

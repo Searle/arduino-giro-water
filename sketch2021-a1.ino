@@ -49,7 +49,7 @@ void setup()
 
 void update_particles()
 {
-  particlesLoop(0, 3);
+  particlesLoop(0, 5);
 }
 
 void show_particles()
@@ -62,13 +62,14 @@ void show_particles()
     byte b = 0;
     for (int x = 0; x < 8; ++x, ++index)
     {
-      if (v[index])
-      { // > (loop_count & 3))
+      if (v[index]) { // > (loop_count & 3)) {
         b |= B10000000 >> x;
       }
     }
     lc.setRow(0, y, b);
   }
+
+  ++loop_count;
 }
 
 inline boolean e(float f) {
@@ -96,11 +97,5 @@ if(0) {
   }
 }
   
-  // writeArduinoOnMatrix();
-  // rows2();
-  // columns();
-  // single();
-  // delay(100);
-//  Prln("ALIVE");
   ++loop_count;
 }
