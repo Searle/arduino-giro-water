@@ -1,6 +1,4 @@
 {
-    "board": "arduino:avr:uno",
-    "port": "COM14",
-    "programmer": "AVRISP mkII",
-    "sketch": "sketch2021-a1.ino"
+    "sketch": "sketch2021-a1.ino",
+    "board": "arduino:avr:uno"
 }
