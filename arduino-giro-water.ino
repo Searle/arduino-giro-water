@@ -26,10 +26,6 @@ unsigned long delaytime = 100;
 #define Prln(s)
 #endif
 
-void init_parts();
-
-int loop_count = 0;
-
 void setup()
 {
   /*
@@ -45,13 +41,8 @@ void setup()
   randomSeed(analogRead(0));
 
   SerialBegin();
+  gyro_setup();
   particlesInit();
-  // gyro_setup();
-}
-
-void update_particles()
-{
-  particlesLoop(0, 5);
 }
 
 void show_particles()
@@ -64,18 +55,19 @@ void show_particles()
     byte b = 0;
     for (int x = 0; x < 8; ++x, ++index)
     {
-      if (v[index]) { // > (loop_count & 3)) {
+      if (v[index]) {
         b |= B10000000 >> x;
       }
     }
     lc.setRow(0, y, b);
   }
-
-  ++loop_count;
 }
 
-inline boolean e(float f) {
-  return f < -0.01 || f > 0.01;
+float clamp(float value) {
+  value *= .5;
+  if (value < -4) return -4;
+  if (value > 4) return 4;
+  return value;
 }
 
 void loop()
@@ -84,48 +76,20 @@ void loop()
   static long t1= 0;
   static long t2= 0;
 
-
-/*
   long m = millis();
 
   if(t1 == 0) {
     t1= t2= m;
     gyro_update();
+    gyro_get_dx();
+    gyro_get_dy();
   }
 
-  if( m - t1 > 50) {
+//  if( m - t1 > 50) {
     gyro_update();
     t1 = m;
-  }
-  if( m - t2 > 150) {
-    Serial.print(gyro_get_dx());
-    Serial.print( "\t");
-    Serial.println(gyro_get_dy());
-    t2 = m;
-  }
-*/
-  update_particles();
-  show_particles();
-  
-// delay(50);
-  return;
-  
-  update_particles();
-  show_particles();
+//  }
 
-if(0) {
-  count++;
-  Particle *p0= getParticle(0);
-  Particle *p1= getParticle(1);
-  if ( e(p0->dx) || e(p0->dy) || e(p0->vx) || e(p0->vy) || e(p1->dx) || e(p1->dy) || e(p1->vx) || e(p1->vy) ) {
-  Pr(count);
-  // Prln("================");
-  for (int i=0; i < PARTICLE_COUNT; i++) {
-    printParticle(getParticle(i));
-  }
-    Prln("");
-  }
-}
-  
-  ++loop_count;
+  particlesLoop(clamp(-gyro_get_dx()), clamp(-gyro_get_dy()));
+  show_particles();
 }
