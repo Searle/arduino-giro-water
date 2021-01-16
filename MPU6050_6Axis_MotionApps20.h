@@ -43,6 +43,12 @@ THE SOFTWARE.
 
 #include "MPU6050.h"
 
+#ifdef F
+  #undef F
+  #define F(x) x
+#endif
+
+
 // Tom Carpenter's conditional PROGMEM code
 // http://forum.arduino.cc/index.php?topic=129407.0
 #ifdef __AVR__

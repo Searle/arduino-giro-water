@@ -48,6 +48,14 @@ THE SOFTWARE.
 #ifndef _I2CDEV_H_
 #define _I2CDEV_H_
 
+#include <Arduino.h>
+
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+    #include "Wire.h"
+#endif
+
+
+
 // -----------------------------------------------------------------------------
 // I2C interface implementation setting
 // -----------------------------------------------------------------------------
