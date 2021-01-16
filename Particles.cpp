@@ -13,7 +13,7 @@
 #define DAMPENING 0.2
 
 Particle particles[PARTICLE_COUNT];
-Particle *neighbors[NEIGHBORS_SIZE];
+byte neighbors[NEIGHBORS_SIZE];
 
 void initParticle(Particle *particle, int id)
 {
@@ -100,9 +100,10 @@ void particlePhysics(Particle *particle, float gravity_x, float gravity_y)
                 int index = (iy * GRID_WIDTH + ix) * MAX_NEIGHBORS;
                 for (int i = 0; i < MAX_NEIGHBORS; ++i, ++index)
                 {
-                    Particle *that = neighbors[index];
-                    if (that)
+                    int n_index = neighbors[index];
+                    if (n_index >= 0)
                     {
+                        Particle *that = particles + n_index;
                         float dx = that->x - particle->x;
                         float dy = that->y - particle->y;
                         float d = sqrt(dx * dx + dy * dy);
@@ -129,7 +130,7 @@ void particlePhysics(Particle *particle, float gravity_x, float gravity_y)
         {
             neighbors[index + i] = neighbors[index + i - 1];
         }
-        neighbors[index] = particle;
+        neighbors[index] = particle->id;
     }
 };
 
@@ -142,7 +143,7 @@ void particlesInit()
 void particlesLoop(float gravity_x, float gravity_y)
 {
     for (int i = 0; i < NEIGHBORS_SIZE; ++i)
-        neighbors[i] = NULL;
+        neighbors[i] = -1;
     for (int i = 0; i < PARTICLE_COUNT; ++i)
         particlePhysics(particles + i, gravity_x, gravity_y);
     for (int i = 0; i < PARTICLE_COUNT; ++i)

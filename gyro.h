@@ -7,5 +7,6 @@ void gyro_setup();
 void gyro_update();
 int gyro_get_dx();
 int gyro_get_dy();
+void gyro_loop();
 
 #endif

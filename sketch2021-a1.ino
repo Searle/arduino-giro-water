@@ -1,5 +1,6 @@
 #include "LedControl.h"
 #include "Particles.h"
+#include "gyro.h"
 
 /*
  Now we need a LedControl to work with.
@@ -16,7 +17,7 @@ unsigned long delaytime = 100;
 #define WithPr 1
 
 #if (WithPr)
-#define SerialBegin() Serial.begin(115200)
+#define SerialBegin() Serial.begin(57600)
 #define Pr Serial.print
 #define Prln Serial.println
 #else
@@ -45,6 +46,7 @@ void setup()
 
   SerialBegin();
   particlesInit();
+  // gyro_setup();
 }
 
 void update_particles()
@@ -79,6 +81,34 @@ inline boolean e(float f) {
 void loop()
 {
   static int count= 0;
+  static long t1= 0;
+  static long t2= 0;
+
+
+/*
+  long m = millis();
+
+  if(t1 == 0) {
+    t1= t2= m;
+    gyro_update();
+  }
+
+  if( m - t1 > 50) {
+    gyro_update();
+    t1 = m;
+  }
+  if( m - t2 > 150) {
+    Serial.print(gyro_get_dx());
+    Serial.print( "\t");
+    Serial.println(gyro_get_dy());
+    t2 = m;
+  }
+*/
+  update_particles();
+  show_particles();
+  
+// delay(50);
+  return;
   
   update_particles();
   show_particles();
