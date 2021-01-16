@@ -49,7 +49,7 @@ void setup()
 
 void update_particles()
 {
-  particlesLoop(0, 0.2);
+  particlesLoop(0, 3);
 }
 
 void show_particles()
@@ -71,22 +71,36 @@ void show_particles()
   }
 }
 
+inline boolean e(float f) {
+  return f < -0.01 || f > 0.01;
+}
+
 void loop()
 {
+  static int count= 0;
+  
   update_particles();
   show_particles();
 
-  Prln("================");
+if(0) {
+  count++;
+  Particle *p0= getParticle(0);
+  Particle *p1= getParticle(1);
+  if ( e(p0->dx) || e(p0->dy) || e(p0->vx) || e(p0->vy) || e(p1->dx) || e(p1->dy) || e(p1->vx) || e(p1->vy) ) {
+  Pr(count);
+  // Prln("================");
   for (int i=0; i < PARTICLE_COUNT; i++) {
     printParticle(getParticle(i));
+  }
     Prln("");
   }
+}
   
   // writeArduinoOnMatrix();
   // rows2();
   // columns();
   // single();
-  delay(100);
-  Prln("ALIVE");
+  // delay(100);
+//  Prln("ALIVE");
   ++loop_count;
 }

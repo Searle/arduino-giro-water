@@ -2,7 +2,7 @@
 
 #include "Particles.h"
 
-#define GRID_CELL_SIZE 40
+#define GRID_CELL_SIZE 71
 #define GRID_CELL_SIZE_HALF (GRID_CELL_SIZE / 2)
 #define CANVAS_WIDTH 400
 #define CANVAS_HEIGHT 400
@@ -17,8 +17,8 @@ Particle *neighbors[NEIGHBORS_SIZE];
 void initParticle(Particle *particle, int id)
 {
     particle->id = id;
-    particle->x = random(CANVAS_WIDTH);
-    particle->y = random(CANVAS_HEIGHT);
+    particle->x = CANVAS_WIDTH / 6 + random(CANVAS_WIDTH * 4 / 6);
+    particle->y = CANVAS_HEIGHT / 6 + random(CANVAS_HEIGHT * 4 / 6);
     particle->vx = 0;
     particle->vy = 0;
     particle->dx = 0;
@@ -92,7 +92,7 @@ void particlePhysics(Particle *particle, float gravity_x, float gravity_y)
     {
         for (int iy = gy - 1; iy <= gy + 1; ++iy)
         {
-            if (ix >= 0 && ix < GRID_WIDTH && iy >= 0 && iy <= GRID_HEIGHT)
+            if (ix >= 0 && ix < GRID_WIDTH && iy >= 0 && iy < GRID_HEIGHT)
             {
                 int index = (iy * GRID_WIDTH + ix) * MAX_NEIGHBORS;
                 for (int i = 0; i < MAX_NEIGHBORS; ++i, ++index)
@@ -153,7 +153,7 @@ void particlesTo8x8(byte *v)
     for (int i = 0; i < PARTICLE_COUNT; i++)
     {
         Particle *particle = particles + i;
-        if (particle->x >= 0 && particle->x < CANVAS_WIDTH && particle->y >= 0 && particle->y <= CANVAS_HEIGHT)
+        if (particle->x >= 0 && particle->x < CANVAS_WIDTH && particle->y >= 0 && particle->y < CANVAS_HEIGHT)
         {
             int x = (particle->x * 8) / CANVAS_WIDTH;
             int y = (particle->y * 8) / CANVAS_HEIGHT;

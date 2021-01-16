@@ -1,4 +1,3 @@
-#pragma once
 #include "gyro.h"
 
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class using DMP (MotionApps v2.0)
@@ -177,7 +176,7 @@ void dmpDataReady() {
 // ===                      INITIAL SETUP                       ===
 // ================================================================
 
-void setup() {
+void gyro_setup() {
     // join I2C bus (I2Cdev library doesn't do this automatically)
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
@@ -269,16 +268,16 @@ void setup() {
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
 
-void loop() {
+void gyro_loop() {
   long m = millis();
   if( m - t1 > 100) {
-    update();
+    gyro_update();
     t1 = m;
   }
   if( m - t2 > 300) {
-    Serial.print( get_dx());
+    Serial.print(gyro_get_dx());
     Serial.print( "\t");
-    Serial.println(get_dy());
+    Serial.println(gyro_get_dy());
     t2 = m;
   }
   
@@ -383,7 +382,7 @@ void loop() {
 //    }
 //}
 
-void update(){
+void gyro_update(){
   if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
       mpu.dmpGetQuaternion(&q, fifoBuffer);
       mpu.dmpGetGravity(&gravity, &q);
@@ -397,10 +396,10 @@ void update(){
   }
 }
 
-int get_dx() {
+int gyro_get_dx() {
   return (dx2 + dx1 + dx0) / 3;  
 }
 
-int get_dy() {
+int gyro_get_dy() {
   return (dy2 + dy1 + dy0) / 3;  
 }
