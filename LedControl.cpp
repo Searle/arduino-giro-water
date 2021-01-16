@@ -55,8 +55,6 @@ LedControl::LedControl(int dataPin, int clkPin, int csPin, int numDevices)
     pinMode(SPI_CS_, OUTPUT);
     digitalWrite(SPI_CS_, HIGH);
     SPI_MOSI = dataPin;
-    for (int i = 0; i < 64; i++)
-        status[i] = 0x00;
     for (int i = 0; i < maxDevices; i++)
     {
         spiTransfer(i, OP_DISPLAYTEST, 0);
@@ -110,8 +108,7 @@ void LedControl::clearDisplay(int addr)
     offset = addr * 8;
     for (int i = 0; i < 8; i++)
     {
-        status[offset + i] = 0;
-        spiTransfer(addr, i + 1, status[offset + i]);
+        spiTransfer(addr, i + 1, 0);
     }
 }
 
@@ -123,8 +120,7 @@ void LedControl::setRow(int addr, int row, byte value)
     if (row < 0 || row > 7)
         return;
     offset = addr * 8;
-    status[offset + row] = value;
-    spiTransfer(addr, row + 1, status[offset + row]);
+    spiTransfer(addr, row + 1, value);
 }
 
 void LedControl::spiTransfer(int addr, volatile byte opcode, volatile byte data)

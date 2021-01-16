@@ -74,7 +74,6 @@ MPU6050 mpu(0x68);
 int dx0, dx1, dx2;
 int dy0, dy1, dy2;
 int dx, dy;
-long t1, t2;
 
 
 
@@ -255,11 +254,6 @@ void gyro_setup() {
         Serial.print(devStatus);
         Serial.println(F(")"));
     }
-
-    // configure LED for output
-    //pinMode(LED_PIN, OUTPUT);
-    t1 = millis();
-    t2 = t1;
 }
 
 
@@ -268,21 +262,6 @@ void gyro_setup() {
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
 
-void gyro_loop() {
-  long m = millis();
-  if( m - t1 > 100) {
-    gyro_update();
-    t1 = m;
-  }
-  if( m - t2 > 300) {
-    Serial.print(gyro_get_dx());
-    Serial.print( "\t");
-    Serial.println(gyro_get_dy());
-    t2 = m;
-  }
-  
-}    
-    
 //    // if programming failed, don't try to do anything
 //    if (!dmpReady) return;
 //    // read a packet from FIFO
