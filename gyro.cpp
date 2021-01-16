@@ -1,3 +1,4 @@
+#pragma once
 #include "gyro.h"
 
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class using DMP (MotionApps v2.0)
@@ -59,6 +60,11 @@ THE SOFTWARE.
     #include "Wire.h"
 #endif
 
+#ifdef F
+  #undef F
+  #define F(x) x
+#endif
+
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
 // AD0 low = 0x68 (default for SparkFun breakout and InvenSense evaluation board)
@@ -70,6 +76,8 @@ int dx0, dx1, dx2;
 int dy0, dy1, dy2;
 int dx, dy;
 long t1, t2;
+
+
 
 /* =========================================================================
    NOTE: In addition to connection 3.3v, GND, SDA, and SCL, this sketch
