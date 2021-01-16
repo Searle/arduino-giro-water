@@ -75,6 +75,13 @@ void loop()
 {
   update_particles();
   show_particles();
+
+  Prln("================");
+  for (int i=0; i < PARTICLE_COUNT; i++) {
+    printParticle(getParticle(i));
+    Prln("");
+  }
+  
   // writeArduinoOnMatrix();
   // rows2();
   // columns();
